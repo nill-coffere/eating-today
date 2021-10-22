@@ -1,0 +1,19 @@
+server:
+  port: 7004
+
+spring:
+  application:
+    name: eating-oauth
+  datasource:
+    username: timekeeping
+    password: escORown
+    url: jdbc:postgresql://182.92.224.4:5432/timekeeping?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: org.postgresql.Driver
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:7001/eureka/

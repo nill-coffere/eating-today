@@ -1,0 +1,22 @@
+server:
+  port: 7002
+
+spring:
+  application:
+    name: eating-gateway
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # open gateway filter
+          lowerCaseServiceId: true # service name lowercase
+
+eureka:
+  instance:
+    prefer-ip-address: true # ip to eureka
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:7001/eureka/

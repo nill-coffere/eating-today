@@ -1,0 +1,15 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: eating-eureka
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false  # not register eureka
+    fetchRegistry: false # controls whether or not this client is going to try to connect to the Eureka server(s) in order to download the information on other services' endpoint
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
