@@ -24,6 +24,17 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     private Integer loginStatus;
 
+    public AuthUser(RedisAuthUser redisAuthUser){
+        super(redisAuthUser.getUser().getUserName(), redisAuthUser.getUser().getPassWord(), true, true, true , true , Collections.EMPTY_SET);
+        User user = redisAuthUser.getUser();
+        this.user = user;
+        this.expireTime = redisAuthUser.getExpireTime();
+        this.loginTime = redisAuthUser.getLoginTime();
+        this.loginInfo = redisAuthUser.getLoginInfo();
+        this.token = redisAuthUser.getToken();
+        this.loginStatus = redisAuthUser.getLoginStatus();
+    }
+
     public AuthUser(com.eating.base.model.oauth.User user) {
         super(user.getUserName(), user.getPassWord(), true, true, true , true , Collections.EMPTY_SET);
         this.user = user;

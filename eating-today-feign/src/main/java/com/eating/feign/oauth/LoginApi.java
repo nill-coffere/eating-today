@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @Author han bin
  **/
-@FeignClient(value = "EATING-OAUTH")
+@FeignClient(value = "EATING-OAUTH", url = "http://192.168.3.13:7004")
 @RequestMapping("/oauth")
 public interface LoginApi {
 

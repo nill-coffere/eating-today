@@ -14,8 +14,6 @@ spring:
 
 feign:
   httpclient:
-    enabled: false
-  okhttp:
     enabled: true
 
 token:

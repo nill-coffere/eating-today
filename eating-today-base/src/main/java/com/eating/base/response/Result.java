@@ -1,11 +1,13 @@
 package com.eating.base.response;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author han bin
  **/
 @Data
+@NoArgsConstructor
 public class Result {
     private int code;
     private String message;

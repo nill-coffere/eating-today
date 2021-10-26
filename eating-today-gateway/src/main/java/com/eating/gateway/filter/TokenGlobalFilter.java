@@ -1,9 +1,9 @@
 package com.eating.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.eating.base.model.oauth.AuthUser;
 import com.eating.base.response.Response;
 import com.eating.base.response.ResultCode;
+import com.eating.base.util.Constants;
 import com.eating.feign.oauth.LoginApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -11,23 +11,17 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Author han bin
@@ -66,15 +60,20 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
                 List<String> authorization = httpRequest.getHeaders().get("Authorization");
                 if(!CollectionUtils.isEmpty(authorization)){
                     String token = authorization.get(0);
+                    if (!Objects.isNull(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
+                        token = token.replace(Constants.TOKEN_PREFIX, "");
+                    }
                     Response response = loginApi.verifyToken(token);
                     if(response.getResult().getCode() == ResultCode.HTTP_SUCCESS){
                         Object module = response.getModule();
-                        AuthUser loginUser = (AuthUser) module;
+                        LinkedHashMap loginUser = (LinkedHashMap) module;
                         if(!Objects.isNull(loginUser)){
                             return chain.filter(exchange);
                         }else{
                             result = getReturnMessage(exchange.getResponse(), ResultCode.HTTP_ERROR, "Log in to expire, please log in again.");
                         }
+                    }else{
+                        result = getReturnMessage(exchange.getResponse(), response.getResult().getCode(), response.getResult().getMessage());
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.eating.oauth.service;
 
 import com.eating.base.model.oauth.AuthUser;
+import com.eating.base.model.oauth.RedisAuthUser;
 import com.eating.base.util.Constants;
 import com.eating.base.util.Random;
 import com.eating.feign.redis.OauthRedisApi;
@@ -46,14 +47,11 @@ public class OauthTokenService {
     private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
 
-    public boolean verifyToken(AuthUser loginUser){
+    public void verifyToken(AuthUser loginUser){
         long expireTime = loginUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MILLIS_MINUTE_TEN){
             refreshToken(loginUser);
-            return true;
-        }else{
-            return false;
         }
     }
 
@@ -62,8 +60,8 @@ public class OauthTokenService {
             Claims claims = parseToken(token);
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
-            AuthUser user = oauthRedisApi.getCacheObject(userKey);
-            return user;
+            RedisAuthUser user = oauthRedisApi.getCacheObject(userKey);
+            return new AuthUser(user);
         }
         return null;
     }
@@ -74,8 +72,8 @@ public class OauthTokenService {
             Claims claims = parseToken(token);
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
-            AuthUser user = oauthRedisApi.getCacheObject(userKey);
-            return user;
+            RedisAuthUser user = oauthRedisApi.getCacheObject(userKey);
+            return new AuthUser(user);
         }
         return null;
     }
@@ -120,7 +118,7 @@ public class OauthTokenService {
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
         String userKey = getTokenKey(user.getToken());
-        oauthRedisApi.setCacheObject(userKey, user, expireTime, TimeUnit.MINUTES);
+        oauthRedisApi.setCacheObject(userKey, new RedisAuthUser(user), expireTime, TimeUnit.MINUTES);
     }
 
     public void removeLoginUser(String token){

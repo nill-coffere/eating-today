@@ -1,6 +1,7 @@
 package com.eating.base.response;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @Author han bin
  **/
 @Data
+@NoArgsConstructor
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Page implements Serializable {
 

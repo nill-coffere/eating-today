@@ -1,6 +1,7 @@
 package com.eating.base.response;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Objects;
  * @Author han bin
  **/
 @Data
+@NoArgsConstructor
 public class Response implements Serializable {
 
     private static final long serialVersion = 1L;

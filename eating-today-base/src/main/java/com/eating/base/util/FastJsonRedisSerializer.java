@@ -17,7 +17,7 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
     private Class<T> clazz;
 
     static {
-        ParserConfig.getGlobalInstance().addAccept("com.eating.oauth.security.AuthUser");
+        ParserConfig.getGlobalInstance().addAccept("com.eating.base.model.oauth.RedisAuthUser");
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
     }
 

@@ -67,18 +67,15 @@ public class LoginService {
     public Response verifyToken(String token){
         AuthUser loginUser = tokenService.getLoginUser(token);
         if(Objects.isNull(loginUser)){
-            return new Response.ResponseBuilder().result(null,false).build();
+            return new Response.ResponseBuilder()
+                    .result(new Result.ResultBuilder()
+                            .code(ResultCode.HTTP_TOKEN_TIMEOUT)
+                            .message("Token expired. Please login again.")
+                            .build(),false)
+                    .build();
         }else{
-            if(tokenService.verifyToken(loginUser)){
-                return new Response.ResponseBuilder().module(loginUser).result(null,true).build();
-            }else{
-                return new Response.ResponseBuilder()
-                        .result(new Result.ResultBuilder()
-                                .code(ResultCode.HTTP_TOKEN_TIMEOUT)
-                                .message("Token expired. Please login again.")
-                                .build(),false)
-                        .build();
-            }
+            tokenService.verifyToken(loginUser);
+            return new Response.ResponseBuilder().module(loginUser).result(null,true).build();
         }
     }
 
