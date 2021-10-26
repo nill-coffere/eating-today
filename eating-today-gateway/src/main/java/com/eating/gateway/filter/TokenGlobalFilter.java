@@ -62,18 +62,18 @@ public class TokenGlobalFilter implements GlobalFilter, Ordered {
                     String token = authorization.get(0);
                     if (!Objects.isNull(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
                         token = token.replace(Constants.TOKEN_PREFIX, "");
-                    }
-                    Response response = loginApi.verifyToken(token);
-                    if(response.getResult().getCode() == ResultCode.HTTP_SUCCESS){
-                        Object module = response.getModule();
-                        LinkedHashMap loginUser = (LinkedHashMap) module;
-                        if(!Objects.isNull(loginUser)){
-                            return chain.filter(exchange);
+                        Response response = loginApi.verifyToken(token);
+                        if(response.getResult().getCode() == ResultCode.HTTP_SUCCESS){
+                            Object module = response.getModule();
+                            LinkedHashMap loginUser = (LinkedHashMap) module;
+                            if(!Objects.isNull(loginUser)){
+                                return chain.filter(exchange);
+                            }else{
+                                result = getReturnMessage(exchange.getResponse(), ResultCode.HTTP_ERROR, "Log in to expire, please log in again.");
+                            }
                         }else{
-                            result = getReturnMessage(exchange.getResponse(), ResultCode.HTTP_ERROR, "Log in to expire, please log in again.");
+                            result = getReturnMessage(exchange.getResponse(), response.getResult().getCode(), response.getResult().getMessage());
                         }
-                    }else{
-                        result = getReturnMessage(exchange.getResponse(), response.getResult().getCode(), response.getResult().getMessage());
                     }
                 }
             }
