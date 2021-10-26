@@ -2,13 +2,26 @@ server:
   port: 7004
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: eating-oauth
   datasource:
     username: timekeeping
     password: escORown
-    url: jdbc:postgresql://182.92.224.4:5432/timekeeping?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:postgresql://182.92.224.4:5432/eating-today?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     driver-class-name: org.postgresql.Driver
+
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+
+token:
+  header: Authorization
+  secret: abcdefghijklmnopqrstuvwxyz
+  expireTime: 30
 
 eureka:
   instance:

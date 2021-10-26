@@ -41,6 +41,8 @@
         <module>eating-today-gateway</module>
         <module>eating-today-service</module>
         <module>eating-today-oauth</module>
+        <module>eating-today-redis</module>
+        <module>eating-today-feign</module>
     </modules>
 
 </project>

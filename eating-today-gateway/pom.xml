@@ -18,14 +18,32 @@
     <properties>
         <start-class>com.eating.gateway.EatingTodayGatewayApplication</start-class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <com-eating-version>0.0.1</com-eating-version>
     </properties>
 
     <dependencies>
 
         <dependency>
             <groupId>com.eating</groupId>
+            <artifactId>eating-today-feign</artifactId>
+            <version>${com-eating-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.eating</groupId>
             <artifactId>eating-today-base</artifactId>
-            <version>0.0.1</version>
+            <version>${com-eating-version}</version>
+            <!-- Gateway service not need database and spring security -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
